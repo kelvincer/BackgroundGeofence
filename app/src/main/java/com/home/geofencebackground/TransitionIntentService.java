@@ -13,6 +13,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
@@ -67,9 +68,9 @@ public class TransitionIntentService extends IntentService {
 
         String status = null;
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER )
-            status = "Entering ";
+            status = "Entrando ";
         else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
-            status = "Exiting ";
+            status = "Saliendo ";
         return status + TextUtils.join( ", ", triggeringGeofencesList);
     }
 
@@ -98,6 +99,7 @@ public class TransitionIntentService extends IntentService {
     // Create a notification
     private Notification createNotification(String msg, PendingIntent notificationPendingIntent) {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
+
         notificationBuilder
                 .setSmallIcon(R.drawable.common_google_signin_btn_icon_light)
                 .setColor(Color.RED)

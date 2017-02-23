@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static Intent makeNotificationIntent(Context context, String m){
+    public static Intent makeNotificationIntent(Context context, String m) {
 
         Intent intent = new Intent(context, MainActivity.class);
         return intent;

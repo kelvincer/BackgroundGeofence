@@ -33,19 +33,23 @@ public class LocationClientService extends Service implements
 
     private static final String TAG = LocationClientService.class.getSimpleName();
     private GoogleApiClient googleApiClient;
-    private LocationRequest mLocationRequest;
     private List<Geofence> mGeofenceLists = new ArrayList<Geofence>();
     private PendingIntent geofencePendingIntent;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         createGoogleApi();
+        buildGeofences();
+    }
+
+    private void buildGeofences() {
 
         Geofence geofence1 = new Geofence.Builder()
-                .setRequestId("your target place")
+                .setRequestId("IDigital")
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setCircularRegion(-12.046374, -77.042793, 2000.0f)
+                .setCircularRegion(-12.046374, -77.042793, 150.0f)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .build();
 
@@ -85,7 +89,10 @@ public class LocationClientService extends Service implements
         }
 
         startLocationUpdate();
+        addGeofences();
+    }
 
+    private void addGeofences() {
 
         try {
             LocationServices.GeofencingApi.addGeofences(
@@ -113,7 +120,12 @@ public class LocationClientService extends Service implements
 
         Log.i(TAG, "lat changed " + location.getLatitude());
         Log.i(TAG, "lng changed " + location.getLongitude());
-        LatLng mLocation = (new LatLng(location.getLatitude(), location.getLongitude()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        googleApiClient.disconnect();
     }
 
     private void createGoogleApi() {
@@ -127,16 +139,13 @@ public class LocationClientService extends Service implements
         }
     }
 
-    private void initLocationRequest() {
-        mLocationRequest = new LocationRequest();
+    private void startLocationUpdate() {
+
+        LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000);
         mLocationRequest.setFastestInterval(2000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-    }
-
-    private void startLocationUpdate() {
-        initLocationRequest();
         try {
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
         } catch (SecurityException e) {
