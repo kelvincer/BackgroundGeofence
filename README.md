@@ -1,2 +1,2 @@
 # BackgroundGeofence
-- Implementacion de geofence en background (funciona cuando la app esta cerrada)
+- Implementacion de geofence en background (funciona aún cuando la app esta cerrada)
