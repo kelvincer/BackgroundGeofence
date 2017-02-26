@@ -17,7 +17,6 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,25 +32,45 @@ public class LocationClientService extends Service implements
 
     private static final String TAG = LocationClientService.class.getSimpleName();
     private GoogleApiClient googleApiClient;
-    private LocationRequest mLocationRequest;
-    private List<Geofence> mGeofenceLists = new ArrayList<Geofence>();
+    private List<Geofence> geofenceLists = new ArrayList<Geofence>();
     private PendingIntent geofencePendingIntent;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         createGoogleApi();
+        buildGeofences();
+    }
+
+    private void buildGeofences() {
 
         Geofence geofence1 = new Geofence.Builder()
-                .setRequestId("your target place")
+                .setRequestId("IDigital")
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setCircularRegion(-12.046374, -77.042793, 2000.0f)
+                .setCircularRegion(-12.046374, -77.042793, 150.0f)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .build();
 
-        mGeofenceLists.add(geofence1);
+        Geofence geofence2 = new Geofence.Builder()
+                .setRequestId("Presmart")
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .setCircularRegion(-10.046374, -77.042793, 150.0f)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .build();
 
-        Log.i(TAG, "geofence added");
+        Geofence geofence3 = new Geofence.Builder()
+                .setRequestId("El Comercio")
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .setCircularRegion(-9.046374, -77.042793, 150.0f)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .build();
+
+        geofenceLists.add(geofence1);
+        geofenceLists.add(geofence2);
+        geofenceLists.add(geofence3);
+
+        Log.i(TAG, "geofences added");
     }
 
     @Override
@@ -85,7 +104,10 @@ public class LocationClientService extends Service implements
         }
 
         startLocationUpdate();
+        addGeofences();
+    }
 
+    private void addGeofences() {
 
         try {
             LocationServices.GeofencingApi.addGeofences(
@@ -113,7 +135,13 @@ public class LocationClientService extends Service implements
 
         Log.i(TAG, "lat changed " + location.getLatitude());
         Log.i(TAG, "lng changed " + location.getLongitude());
-        LatLng mLocation = (new LatLng(location.getLatitude(), location.getLongitude()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        googleApiClient.disconnect();
+        //LocationServices.GeofencingApi.removeGeofences(googleApiClient, getGeofencePendingIntent());
     }
 
     private void createGoogleApi() {
@@ -127,16 +155,13 @@ public class LocationClientService extends Service implements
         }
     }
 
-    private void initLocationRequest() {
-        mLocationRequest = new LocationRequest();
+    private void startLocationUpdate() {
+
+        LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(5000);
         mLocationRequest.setFastestInterval(2000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-    }
-
-    private void startLocationUpdate() {
-        initLocationRequest();
         try {
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
         } catch (SecurityException e) {
@@ -152,7 +177,7 @@ public class LocationClientService extends Service implements
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofences(mGeofenceLists);
+        builder.addGeofences(geofenceLists);
         return builder.build();
     }
 

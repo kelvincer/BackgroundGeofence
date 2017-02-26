@@ -10,6 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.i(TAG, "on create");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -36,9 +40,19 @@ public class MainActivity extends AppCompatActivity {
 
             startService();
         }
+
+        Button stopBtn = (Button) findViewById(R.id.stop_btn);
+
+        stopBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService(new Intent(getApplicationContext(), LocationClientService.class));
+                Log.i(TAG, "service stopped");
+            }
+        });
     }
 
-    public static Intent makeNotificationIntent(Context context, String m){
+    public static Intent makeNotificationIntent(Context context, String m) {
 
         Intent intent = new Intent(context, MainActivity.class);
         return intent;
