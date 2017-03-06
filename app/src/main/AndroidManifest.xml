@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.home.geofencebackground">
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -20,10 +21,9 @@
 
         <service
             android:name=".TransitionIntentService"
-            android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
-        <service android:name=".LocationClientService"/>
+        <service android:name=".LocationClientService" />
     </application>
 
 </manifest>
