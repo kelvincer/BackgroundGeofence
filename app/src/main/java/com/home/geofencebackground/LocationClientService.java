@@ -48,13 +48,12 @@ public class LocationClientService extends Service implements
     private void buildGeofences() {
 
         Geofence geofence1 = new Geofence.Builder()
-                .setRequestId("Idigital")
-                .setCircularRegion(-12.0921, -77.0335, GEOFENCE_RADIUS)
+                .setRequestId("Paradero Javier P.")
+                .setCircularRegion(-12.091483, -77.026072, GEOFENCE_RADIUS)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
                         | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
-
 
         Geofence geofence2 = new Geofence.Builder()
                 .setRequestId("Presmart")
