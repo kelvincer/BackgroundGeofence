@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,6 +35,7 @@ public class LocationClientService extends Service implements
     private GoogleApiClient googleApiClient;
     private List<Geofence> geofenceLists = new ArrayList<Geofence>();
     private PendingIntent geofencePendingIntent;
+    private float GEOFENCE_RADIUS = 150f;
 
     @Override
     public void onCreate() {
@@ -46,29 +48,62 @@ public class LocationClientService extends Service implements
     private void buildGeofences() {
 
         Geofence geofence1 = new Geofence.Builder()
-                .setRequestId("IDigital")
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setCircularRegion(-12.046374, -77.042793, 150.0f)
+                .setRequestId("Idigital")
+                .setCircularRegion(-12.0921, -77.0335, GEOFENCE_RADIUS)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
+
 
         Geofence geofence2 = new Geofence.Builder()
                 .setRequestId("Presmart")
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setCircularRegion(-10.046374, -77.042793, 150.0f)
+                .setCircularRegion(-12.0680, -77.0367, GEOFENCE_RADIUS)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
+
 
         Geofence geofence3 = new Geofence.Builder()
                 .setRequestId("El Comercio")
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setCircularRegion(-9.046374, -77.042793, 150.0f)
+                .setCircularRegion(-12.0856, -77.0550, GEOFENCE_RADIUS)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build();
+
+        Geofence geofence4 = new Geofence.Builder()
+                .setRequestId("Oficinas")
+                .setCircularRegion(-12.095942, -77.024103, GEOFENCE_RADIUS)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build();
+
+        Geofence geofence5 = new Geofence.Builder()
+                .setRequestId("Casa")
+                .setCircularRegion(-12.047896, -76.965011, GEOFENCE_RADIUS)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build();
+
+
+        Geofence geofence6 = new Geofence.Builder()
+                .setRequestId("Paradero Clínica")
+                .setCircularRegion(-12.090281, -77.017376, GEOFENCE_RADIUS)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
 
         geofenceLists.add(geofence1);
         geofenceLists.add(geofence2);
         geofenceLists.add(geofence3);
+        geofenceLists.add(geofence4);
+        geofenceLists.add(geofence5);
+        geofenceLists.add(geofence6);
 
         Log.i(TAG, "geofences added");
     }
@@ -135,12 +170,13 @@ public class LocationClientService extends Service implements
 
         Log.i(TAG, "lat changed " + location.getLatitude());
         Log.i(TAG, "lng changed " + location.getLongitude());
+        Toast.makeText(getApplicationContext(), "Location changed", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        googleApiClient.disconnect();
+        //googleApiClient.disconnect();
         //LocationServices.GeofencingApi.removeGeofences(googleApiClient, getGeofencePendingIntent());
     }
 
@@ -158,8 +194,8 @@ public class LocationClientService extends Service implements
     private void startLocationUpdate() {
 
         LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(5000);
-        mLocationRequest.setFastestInterval(2000);
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(10000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         try {
