@@ -35,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
                         android.Manifest.permission.ACCESS_COARSE_LOCATION}, MULTIPLE_PERMISSION_REQUEST_CODE);
             else
-                startService();
+                startGeofenceService();
         } else {
 
-            startService();
+            startGeofenceService();
         }
 
         Button stopBtn = (Button) findViewById(R.id.stop_btn);
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         return intent;
     }
 
-    private void startService() {
+    private void startGeofenceService() {
 
         Log.i(TAG, "location client service start");
         Intent intent = new Intent(this, LocationClientService.class);
@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == MULTIPLE_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //The External Storage Write Permission is granted to you... Continue your left job...
-                startService();
+                startGeofenceService();
             } else {
-
+                Log.d(TAG, "permission denied");
             }
         }
     }

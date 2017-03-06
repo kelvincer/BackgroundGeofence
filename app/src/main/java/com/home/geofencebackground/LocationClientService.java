@@ -114,7 +114,7 @@ public class LocationClientService extends Service implements
 
         if (!googleApiClient.isConnected())
             googleApiClient.connect();
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     @Nullable
