@@ -19,14 +19,16 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingEvent;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TransitionIntentService extends IntentService {
 
 
     private static final String TAG = TransitionIntentService.class.getSimpleName();
-    public static final int GEOFENCE_NOTIFICATION_ID = 0;
+    public int GEOFENCE_NOTIFICATION_ID;
 
     public TransitionIntentService() {
         super(TAG);
@@ -91,8 +93,7 @@ public class TransitionIntentService extends IntentService {
         // Creating and sending Notification
         NotificationManager notificatioMng =
                 (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
-        notificatioMng.notify(
-                GEOFENCE_NOTIFICATION_ID,
+        notificatioMng.notify(generateId(),
                 createNotification(msg, notificationPendingIntent));
     }
 
@@ -101,7 +102,7 @@ public class TransitionIntentService extends IntentService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 
         notificationBuilder
-                .setSmallIcon(R.drawable.common_google_signin_btn_icon_light)
+                .setSmallIcon(R.drawable.common_signin_btn_icon_dark)
                 .setColor(Color.RED)
                 .setContentTitle(msg)
                 .setContentText("Geofence Notification!")
@@ -123,6 +124,17 @@ public class TransitionIntentService extends IntentService {
             default:
                 return "Unknown error.";
         }
+    }
+
+    private int generateId() {
+
+        Date dNow = new Date();
+        SimpleDateFormat ft = new SimpleDateFormat("hhmmssMs");
+        String datetime = ft.format(dNow);
+        Log.i(TAG, datetime);
+        GEOFENCE_NOTIFICATION_ID = Integer.parseInt(datetime);
+
+        return GEOFENCE_NOTIFICATION_ID;
     }
 }
 

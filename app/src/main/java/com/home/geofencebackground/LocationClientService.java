@@ -1,7 +1,9 @@
 package com.home.geofencebackground;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -169,14 +172,16 @@ public class LocationClientService extends Service implements
 
         Log.i(TAG, "lat changed " + location.getLatitude());
         Log.i(TAG, "lng changed " + location.getLongitude());
-        Toast.makeText(getApplicationContext(), "Location changed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Location changed service", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //googleApiClient.disconnect();
-        //LocationServices.GeofencingApi.removeGeofences(googleApiClient, getGeofencePendingIntent());
+        Log.i(TAG, "alarm destroy");
+        googleApiClient.unregisterConnectionCallbacks(this);
+        LocationServices.GeofencingApi.removeGeofences(googleApiClient, getGeofencePendingIntent());
+        googleApiClient.disconnect();
     }
 
     private void createGoogleApi() {

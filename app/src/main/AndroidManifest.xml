@@ -23,7 +23,13 @@
             android:name=".TransitionIntentService"
             android:exported="true" />
 
-        <service android:name=".LocationClientService" />
+        <service
+            android:name=".LocationClientService"
+            android:enabled="true" />
+
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true" />
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 package com.home.geofencebackground;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +14,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "service stopped");
             }
         });
+
+        setUpAlarm();
     }
 
     public static Intent makeNotificationIntent(Context context, String m) {
@@ -76,5 +82,96 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "permission denied");
             }
         }
+    }
+
+    private AlarmManager alarmMgr;
+    private PendingIntent alarmIntent;
+
+    private void setUpAlarm() {
+
+        Log.i(TAG, "configured alarm");
+        alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        //Set first Alarm
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("code", 1);
+        alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + 24 * 60 * 60 * 1000);
+            //calendar.add(Calendar.DATE, 1);
+        }
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
+
+        //Set second Alarm
+        intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("code", 2);
+        alarmIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 7);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + 24 * 60 * 60 * 1000);
+            //calendar.add(Calendar.DATE, 1);
+        }
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
+    }
+
+    private void setupAlarmForServices() {
+
+        Log.i(TAG, "configured alarm");
+        alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        //Set first Alarm
+        Intent intent = new Intent(this, LocationClientService.class);
+        intent.putExtra("code", 1);
+        alarmIntent = PendingIntent.getService(this, 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + 24 * 60 * 60 * 1000);
+            //calendar.add(Calendar.DATE, 1);
+        }
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
+
+        //Set second Alarm
+        intent = new Intent(this, LocationClientService.class);
+        intent.putExtra("code", 2);
+        alarmIntent = PendingIntent.getService(this, 1, intent, 0);
+
+        calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 7);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.setTimeInMillis(calendar.getTimeInMillis() + 24 * 60 * 60 * 1000);
+            //calendar.add(Calendar.DATE, 1);
+        }
+
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 }
