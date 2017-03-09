@@ -19,16 +19,16 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         this.context = context;
-        int code = intent.getExtras().getInt("code");
+        int intentType = intent.getExtras().getInt("IntentType");
 
-        if (code == 1) {
+        if (intentType == 1) {
             if (isMyServiceRunning(LocationClientService.class)) {
                 context.stopService(new Intent(context, LocationClientService.class));
                 Log.d(TAG, "service stopped");
             }else{
                 Log.d(TAG, "Service already stopped");
             }
-        } else if (code == 2) {
+        } else if (intentType == 2) {
 
             if(!isMyServiceRunning(LocationClientService.class)) {
                 context.startService(new Intent(context, LocationClientService.class));

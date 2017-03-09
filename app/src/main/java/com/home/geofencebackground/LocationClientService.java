@@ -178,7 +178,7 @@ public class LocationClientService extends Service implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "alarm destroy");
+        Log.i(TAG, "google api disconnect");
         googleApiClient.unregisterConnectionCallbacks(this);
         LocationServices.GeofencingApi.removeGeofences(googleApiClient, getGeofencePendingIntent());
         googleApiClient.disconnect();
@@ -209,11 +209,6 @@ public class LocationClientService extends Service implements
         }
     }
 
-    private PendingIntent getPendingIntent() {
-        Intent intent = new Intent(this, TransitionIntentService.class);
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
@@ -230,7 +225,9 @@ public class LocationClientService extends Service implements
         Intent intent = new Intent(this, TransitionIntentService.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
         // calling addGeofences() and removeGeofences().
-        return PendingIntent.getService(this, 0, intent, PendingIntent.
+        geofencePendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
+
+        return geofencePendingIntent;
     }
 }

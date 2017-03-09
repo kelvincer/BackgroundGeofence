@@ -81,14 +81,9 @@ public class TransitionIntentService extends IntentService {
         Log.i(TAG, "sendNotification: " + msg );
 
         // Intent to start the main Activity
-        Intent notificationIntent = MainActivity.makeNotificationIntent(
-                getApplicationContext(), msg
-        );
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(notificationIntent);
-        PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent newIntent = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(getApplicationContext(),
+                0, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Creating and sending Notification
         NotificationManager notificatioMng =
@@ -102,7 +97,7 @@ public class TransitionIntentService extends IntentService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
 
         notificationBuilder
-                .setSmallIcon(R.drawable.common_signin_btn_icon_dark)
+                .setSmallIcon(R.drawable.ic_my_location_black_24dp)
                 .setColor(Color.RED)
                 .setContentTitle(msg)
                 .setContentText("Geofence Notification!")

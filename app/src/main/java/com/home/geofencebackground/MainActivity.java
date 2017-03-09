@@ -55,13 +55,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        setUpAlarm();
-    }
-
-    public static Intent makeNotificationIntent(Context context, String m) {
-
-        Intent intent = new Intent(context, MainActivity.class);
-        return intent;
+        setUpAlarms();
     }
 
     private void startGeofenceService() {
@@ -87,14 +81,14 @@ public class MainActivity extends AppCompatActivity {
     private AlarmManager alarmMgr;
     private PendingIntent alarmIntent;
 
-    private void setUpAlarm() {
+    private void setUpAlarms() {
 
         Log.i(TAG, "configured alarm");
         alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         //Set first Alarm
         Intent intent = new Intent(this, AlarmReceiver.class);
-        intent.putExtra("code", 1);
+        intent.putExtra("IntentType", 1);
         alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
@@ -109,11 +103,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+        AlarmManager.INTERVAL_DAY, alarmIntent);
 
         //Set second Alarm
         intent = new Intent(this, AlarmReceiver.class);
-        intent.putExtra("code", 2);
+        intent.putExtra("IntentType", 2);
         alarmIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
         calendar = Calendar.getInstance();
