@@ -100,12 +100,30 @@ public class LocationClientService extends Service implements
                         | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build();
 
+        Geofence geofence7 = new Geofence.Builder()
+                .setRequestId("Paradero La Molina")
+                .setCircularRegion(-12.071825, -76.956418, GEOFENCE_RADIUS)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build();
+
+        Geofence geofence8 = new Geofence.Builder()
+                .setRequestId("Paradero Jockey")
+                .setCircularRegion(-12.084798, -76.978379, GEOFENCE_RADIUS)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                        | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build();
+
         geofenceLists.add(geofence1);
         geofenceLists.add(geofence2);
         geofenceLists.add(geofence3);
         geofenceLists.add(geofence4);
         geofenceLists.add(geofence5);
         geofenceLists.add(geofence6);
+        geofenceLists.add(geofence7);
+        geofenceLists.add(geofence8);
 
         Log.i(TAG, "geofences added");
     }
@@ -172,7 +190,7 @@ public class LocationClientService extends Service implements
 
         Log.i(TAG, "lat changed " + location.getLatitude());
         Log.i(TAG, "lng changed " + location.getLongitude());
-        Toast.makeText(getApplicationContext(), "Location changed service", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Location changed service", Toast.LENGTH_SHORT).show();
     }
 
     @Override
