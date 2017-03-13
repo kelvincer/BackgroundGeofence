@@ -47,16 +47,34 @@ public class TransitionIntentService extends IntentService {
         }
 
         // Retrieve GeofenceTrasition
+        PreferenceManager preferenceManager  = new PreferenceManager(this);
+        int lastDirection = preferenceManager.getInt("LAST_DIRECTION", -1);
+        String geofenceId = preferenceManager.getString("GEOFENCE_ID", "");
+
         int geoFenceTransition = geofencingEvent.getGeofenceTransition();
+        List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+        Geofence geofence = triggeringGeofences.get(0);
+
+        if(geofenceId.equals(geofence.getRequestId())){
+
+            if(lastDirection == geoFenceTransition)
+                return;
+
+            preferenceManager.putInt("LAST_DIRECTION", geoFenceTransition);
+        }else{
+            preferenceManager.putString("GEOFENCE_ID", geofence.getRequestId());
+            preferenceManager.putInt("LAST_DIRECTION", geoFenceTransition);
+        }
+
         // Check if the transition type
         if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT ) {
             // Get the geofence that were triggered
-            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+
             // Create a detail message with Geofences received
             String geofenceTransitionDetails = getGeofenceTrasitionDetails(geoFenceTransition, triggeringGeofences );
             // Send notification details as a String
-            sendNotification( geofenceTransitionDetails );
+            sendNotification( geofenceTransitionDetails);
         }
     }
 

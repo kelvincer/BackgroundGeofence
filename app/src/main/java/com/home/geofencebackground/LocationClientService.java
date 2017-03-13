@@ -190,7 +190,7 @@ public class LocationClientService extends Service implements
 
         Log.i(TAG, "lat changed " + location.getLatitude());
         Log.i(TAG, "lng changed " + location.getLongitude());
-        //Toast.makeText(getApplicationContext(), "Location changed service", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Location changed service", Toast.LENGTH_SHORT).show();
     }
 
     @Override

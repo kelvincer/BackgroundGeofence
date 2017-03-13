@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "configured alarm");
         alarmMgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-        //Set first Alarm
+        //Set first Alarm(apagar alarma a las 10 p.m)
         Intent intent = new Intent(this, AlarmReceiver.class);
         intent.putExtra("IntentType", 1);
         alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
         AlarmManager.INTERVAL_DAY, alarmIntent);
 
-        //Set second Alarm
+        //Set second Alarm(encender alarma a las 7 a.m)
         intent = new Intent(this, AlarmReceiver.class);
         intent.putExtra("IntentType", 2);
         alarmIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
